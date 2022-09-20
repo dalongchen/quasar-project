@@ -20,10 +20,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 // import VChart from 'vue-echarts';
 import { defineComponent } from 'vue';
-// import axios from 'axios'
-
-// import { api } from 'boot/axios'
-// import { useQuasar } from 'quasar'
+import { api } from 'boot/axios'
 
 echarts.use([
   ToolboxComponent,
@@ -41,9 +38,13 @@ echarts.use([
   UniversalTransition
 ]);
 
-
+api.get('/polls/').then(res => {
+  console.log(res);
+}).catch((err) => {
+  console.log(err);
+})
 export default defineComponent({
-  name: 'LearnChartK',
+  name: 'LearnChartK1',
   components: {
     // VChart,
   },

@@ -86,35 +86,8 @@ module.exports = configure(function (/* ctx */) {
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
-    // devServer: {
-    //   // host: 'localhost',
-    //   // port: 8080,
-    //   // https: true,
-    //   open: true, // opens browser window automatically
-    //   headers: {
-    //     'Access-Control-Allow-Origin': '*',
-    //   },
-    //   proxy: {
-    //     '/made': {
-    //       target: 'https://echarts.apache.org/examples',
-    //       // changeOrigin: true,
-    //     }
-    //   }
 
-    // },
     devServer: {
-      // proxy: {
-      //   // proxy all requests starting with /api to jsonplaceholder
-      //   '/api': {
-      //     target: 'https://echarts.apache.org/examples/',
-      //     // target: 'https://aip.baidubce.com/',
-      //     changeOrigin: true,
-      //     secure: false,
-      //     pathRewrite: {
-      //       '^/api': ''
-      //     }
-      //   }
-      // }
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework

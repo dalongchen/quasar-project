@@ -11,9 +11,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayoutSt.vue'),
     children: [{ path: '', component: () => import('pages/IndexPageSt.vue') }],
   },
+  {
+    path: '/tab',
+    component: () => import('layouts/MainLayoutSt.vue'),
+    children: [{ path: '', component: () => import('pages/IndexTable.vue') }],
+  },
 
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
