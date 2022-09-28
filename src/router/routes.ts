@@ -7,7 +7,7 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
   {
-    path: '/st',
+    path: '/stockk/:id',
     component: () => import('layouts/MainLayoutSt.vue'),
     children: [{ path: '', component: () => import('pages/IndexPageSt.vue') }],
   },
@@ -16,7 +16,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayoutSt.vue'),
     children: [{ path: '', component: () => import('pages/IndexTable.vue') }],
   },
-
+  {
+    path: '/mytest',
+    component: () => import('layouts/MainLayoutSt.vue'),
+    children: [{ path: '', component: () => import('pages/IndexTableMyTest.vue') }],
+    // component: () => import('layouts/MyTestLayout.vue'),
+  },
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
