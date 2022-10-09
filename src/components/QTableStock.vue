@@ -8,40 +8,46 @@
       :filter="filter">
       <template v-slot:top>
         <div class="row">
-          <q-select v-model="visibleColumns2" outlined dense options-dense emit-value map-options :options="column"
-            option-value="label" options-cover>
+          <q-select v-model="visibleColumns2" borderless dense options-dense emit-value map-options :options="column"
+            option-value="label" options-cover hide-dropdown-icon>
           </q-select>
-          <q-select v-model="modelSingle" outlined dense options-dense emit-value map-options :options="options"
-            options-cover>
+          <q-select v-model="modelSingle" borderless dense options-dense emit-value map-options :options="options"
+            options-cover hide-dropdown-icon>
           </q-select>
-          <q-input v-model="inputValue" outlined dense debounce="300" placeholder="Search" input-style="padding: 0px">
+          <q-input v-model="inputValue" borderless clearable dense debounce="300" placeholder="?"
+            input-style="padding: 0px;width:5vw">
             <template v-slot:append>
-              <q-icon name="search" v-on:click="getPollStockPreAdd('yuttpiu')" />
+              <q-select v-model="visibleColumns23" borderless dense options-dense emit-value map-options
+                :options="column2" option-value="label" options-cover hide-dropdown-icon>
+              </q-select>
+              <q-icon v-if="andOr==='no'" name="search" v-on:click="getPollStockPreAdd('one')" />
             </template>
           </q-input>
-          <q-select v-model="andOr" outlined dense options-dense emit-value map-options :options="optionsAndOr"
-            options-cover>
+          <q-select v-model="andOr" borderless dense options-dense emit-value map-options :options="optionsAndOr"
+            options-cover hide-dropdown-icon>
           </q-select>
-          <q-select v-if="andOr!=='no'" v-model="visibleColumns22" outlined dense options-dense emit-value map-options
-            :options="column" option-value="label" options-cover>
+          <q-select v-if="andOr!=='no'" v-model="visibleColumns22" borderless dense options-dense emit-value map-options
+            :options="column" option-value="label" options-cover hide-dropdown-icon>
           </q-select>
-          <q-select v-if="andOr!=='no'" v-model="modelSingle2" outlined dense options-dense emit-value map-options
-            :options="options" options-cover>
+          <q-select v-if="andOr!=='no'" v-model="modelSingle2" borderless dense options-dense emit-value map-options
+            :options="options" options-cover hide-dropdown-icon>
           </q-select>
-          <q-input v-if="andOr!=='no'" v-model="inputValue2" outlined dense debounce="300" placeholder="Search"
-            input-style="padding: 0px">
+          <q-input v-if="andOr!=='no'" v-model="inputValue2" borderless dense debounce="300" placeholder="?" clearable
+            input-style="padding: 0px;width:5vw">
             <template v-slot:append>
-              <q-icon name="search" v-on:click="getPollStockPreAdd('yuttpiu')" />
+              <q-icon name="search" v-on:click="getPollStockPreAdd('two')" />
             </template>
           </q-input>
-          <q-select v-model="visibleColumns" multiple outlined dense options-dense display-value="列" emit-value
-            map-options :options="column" option-value="name" options-cover>
-          </q-select>
-          <q-input outlined dense debounce="300" v-model="filter" placeholder="过滤" input-style="padding: 0px">
+
+          <q-input borderless dense debounce="300" v-model="filter" placeholder="过滤"
+            input-style="padding: 0px;width:5vw" clearable autogrow>
             <template v-slot:append>
               <q-icon name="search" />
             </template>
           </q-input>
+          <q-select v-model="visibleColumns" multiple borderless dense options-dense display-value="列" emit-value
+            map-options :options="column" option-value="name" options-cover hide-dropdown-icon>
+          </q-select>
         </div>
       </template>
       <template v-slot:body-cell-0="props">
@@ -50,7 +56,6 @@
             {{props.value}}
           </a>
         </q-td>
-        <!-- <q-td :props="props" v-on:click="stockk(props.value)">{{props.value}}</q-td> -->
       </template>
       <template v-slot:body-cell-2="props">
         <q-td :props="props">
@@ -89,11 +94,13 @@ export default {
   data() {
     return {
       column: [],
+      column2: [],
       rows: [],
-      modelSingle: ref('='),
-      modelSingle2: ref('='),
+      modelSingle: ref('like'),
+      modelSingle2: ref('like'),
       visibleColumns2: ref('股票代码'),
       visibleColumns22: ref('股票代码'),
+      visibleColumns23: ref('重复'),
       inputValue: ref(''),
       inputValue2: ref(''),
       andOr: ref('no'),
@@ -101,24 +108,62 @@ export default {
     }
   },
   methods: {
-    getPollStockPre(vv) {
-      console.log(vv);
+    getPollStockPre() {
+      // console.log(vv);
       api.get('/polls/').then(res => {
-        this.column = res.data.col;
+        let rr = res.data.col;
+        this.column = rr;
         this.rows = res.data.da;
-        // console.log(this.rows[0][6]);
+        rr.push({ name: 10, label: '重复', field: 10 });
+        this.column2 = rr;
+        console.log(rr);
       }).catch((err) => {
         console.log(err);
       });
     },
     getPollStockPreAdd(vv) {
       console.log(vv);
+      let col;
+      if (this.visibleColumns2 === '类型') {
+        col = '预告类型'
+      } else if (this.visibleColumns2 === '幅度') {
+        col = '业绩变动幅度'
+      } else {
+        col = this.visibleColumns2
+      };
+      let repace2;
+      if (this.visibleColumns23 === '重复') {
+        repace2 = ''
+      } else {
+        repace2 = ' GROUP BY ' + this.visibleColumns23
+      }
+      let tota1;
+      if (this.modelSingle === 'like') {
+        tota1 = col + ' ' + this.modelSingle + " '%" + this.inputValue + "%' " + repace2
+      } else {
+        tota1 = col + this.modelSingle + "'" + this.inputValue + "' " + repace2
+      }
+      console.log(tota1)
+
+      if (vv === 'two') {
+        let col2;
+        if (this.visibleColumns22 === '类型') {
+          col2 = '预告类型'
+        } else if (this.visibleColumns22 === '幅度') {
+          col2 = '业绩变动幅度'
+        } else {
+          col2 = this.visibleColumns22
+        };
+
+        if (this.modelSingle2 === 'like') {
+          tota1 = col2 + ' ' + this.modelSingle2 + " '%" + this.inputValue2 + "%' " + this.andOr + ' ' + tota1
+        } else {
+          tota1 = col2 + this.modelSingle2 + "'" + this.inputValue2 + "' " + this.andOr + ' ' + tota1
+        }
+        console.log(tota1)
+      }
       api.get('/polls/5/', {
-        params: {
-          col: this.visibleColumns2,
-          comp: this.modelSingle,
-          inp: this.inputValue,
-        },
+        params: { tota: tota1 }
       }).then(res => {
         this.rows = res.data.dat;
         console.log(res.data);
@@ -128,23 +173,11 @@ export default {
     },
     stockk(vv) {
       console.log(vv);
-      // api.get('/polls/5/', {
-      //   params: {
-      //     col: this.visibleColumns2,
-      //     comp: this.modelSingle,
-      //     inp: this.inputValue,
-      //   },
-      // }).then(res => {
-      //   this.rows = res.data.dat;
-      //   console.log(res.data);
-      // }).catch((err) => {
-      //   console.log(err);
-      // });
     }
   },
   //加载完成声明周期函数  调用
   mounted() {
-    this.getPollStockPre('uiy09')
+    this.getPollStockPre()
   },
   setup() {
     return {

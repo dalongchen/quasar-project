@@ -1,5 +1,5 @@
 <template>
-  <div>User {{ $route.params.id }}</div>
+  <!-- <div>User {{ $route.params.id }}</div> -->
   <!-- <v-chart class="chart" :option="option" /> -->
   <div ref="linechart" class="chart" id="main"></div>
 </template>
@@ -58,23 +58,6 @@ export default defineComponent({
     }
   },
   methods: {
-    splitData(rawData) {
-      console.log('uy')
-      let categoryData = [];
-      let values = [];
-      let volumes = [];
-      for (let i = 0; i < rawData.length; i++) {
-        categoryData.push(rawData[i].splice(0, 1)[0]);
-        values.push(rawData[i]);
-        volumes.push([i, rawData[i][4], rawData[i][0] > rawData[i][1] ? 1 : -1]);
-      }
-      // console.log(volumes)
-      return {
-        categoryData: categoryData,
-        values: values,
-        volumes: volumes
-      };
-    },
     calculateMA(dayCount, data) {
       var result = [];
       // console.log(data)
@@ -98,11 +81,12 @@ export default defineComponent({
           inp: this.$route.params.id,
         },
       }).then(res => {
-        let dat = this.splitData(res.data.dat)
+        // let dat = this.splitData(res.data.dat)
         // console.log(dat);
+        // console.log(res.data.dat_yj_yg);
         // let myOption = this.myOption(dat)
         // this.init(myOption)
-        this.line_chart.setOption(this.myOption(dat))
+        this.line_chart.setOption(this.myOption(res.data.dat, res.data.dat_yj_yg))
       }).catch((err) => {
         console.log(err);
       });
@@ -115,8 +99,9 @@ export default defineComponent({
       this.line_chart = echarts.init(lineChart, theme);
       // line_chart.setOption(options)
     },
-    myOption(data) {
+    myOption(data, dataMa) {
       return {
+        // useCoarsePointer: true,
         animation: false,
         legend: {
           bottom: 1,
@@ -145,26 +130,10 @@ export default defineComponent({
           // triggerOn: 'click',
           link: [{ xAxisIndex: 'all' }]
         },
-        // toolbox: {
-        //   feature: {
-        //     dataZoom: {
-        //       yAxisIndex: false
-        //     },
-        //     brush: {
-        //       type: ['lineX', 'clear']
-        //     }
-        //   }
-        // },
-        // brush: {
-        //   xAxisIndex: 'all',
-        //   brushLink: 'all',
-        //   outOfBrush: {
-        //     colorAlpha: 0.1
-        //   }
-        // },
+
         visualMap: {
           show: false,
-          seriesIndex: 5,
+          seriesIndex: 6,
           dimension: 2,
           pieces: [
             {
@@ -179,16 +148,16 @@ export default defineComponent({
         },
         grid: [
           {
-            left: '3%',
+            left: '8%',
             right: '1%',
             height: '65%'
           },
           {
-            left: '3%',
+            left: '8%',
             right: '1%',
             top: '80%',
             height: '10%'
-          }
+          },
         ],
         xAxis: [
           {
@@ -219,7 +188,7 @@ export default defineComponent({
             axisPointer: {
               label: { show: false },
             }
-          }
+          },
         ],
         yAxis: [
           {
@@ -234,14 +203,20 @@ export default defineComponent({
             },
           },
           {
+            // name: 'hk',
+            // type: 'value',
             scale: true,
             gridIndex: 1,
-            splitNumber: 2,
-            axisLabel: { show: false },
+            splitNumber: 3,
+            axisLabel: {
+              show: true, formatter: function (param) {
+                return (param / 10000) + 'w'
+              }
+            },
             axisLine: { show: false },
-            axisTick: { show: false },
-            splitLine: { show: false }
-          }
+            // axisTick: { show: true },
+            splitLine: { show: true, interval: 'auto', lineStyle: this.mylineStyle }
+          },
         ],
         dataZoom: [
           {
@@ -250,16 +225,16 @@ export default defineComponent({
             startValue: data.categoryData.length - 150,
             // endValue: data_length,//设置X轴刻度之间的间隔(根据数据量来调整)
           },
-          {
-            show: true,
-            // height: 10, //设置滚轴的高度
-            xAxisIndex: [0, 1],
-            type: 'inside',
-            // type: 'slider',
-            top: '85%',
-            startValue: data.categoryData.length - 150,
-            // endValue: data_length,
-          }
+          // {
+          //   show: true,
+          //   // height: 10, //设置滚轴的高度
+          //   xAxisIndex: [0, 1],
+          //   type: 'inside',
+          //   // type: 'slider',
+          //   top: '85%',
+          //   startValue: data.categoryData.length - 150,
+          //   // endValue: data_length,
+          // }
         ],
         series: [
           {
@@ -323,7 +298,24 @@ export default defineComponent({
             },
             tooltip: {
               show: false,
-            }
+            },
+          },
+          {
+            // name: 'gg',
+            type: 'scatter',
+            symbolSize: 12,
+            data: dataMa,
+            // data: [['1999-11-11', 28, 'uy'], ['1999-11-12', 29, 'uy']],
+            tooltip: {
+              position: ['1%', '1%'],
+              formatter: function (param) {
+                param = param.data;
+                return [
+                  '<div style="width:90%;word-break: break-all;word-wrap: break-word;white-space: normal;">'
+                  + param[2] + ',' + param[3] + ',' + param[4] + ',' + param[5] + '<br/>' + param[6] + '</div>'
+                ].join('');
+              }
+            },
           },
           {
             name: 'Volume',
@@ -332,25 +324,6 @@ export default defineComponent({
             yAxisIndex: 1,
             stack: 'x',
             data: data.volumes,
-
-          },
-          {
-            xAxisIndex: 1,
-            yAxisIndex: 1,
-            data: [[1, 20000000, '预祝']],
-            // data: data.volumes.slice(500, 540),
-            type: 'bar',
-            stack: 'x',
-            tooltip: {
-              formatter: function (param) {
-                // console.log(param)
-                return [
-                  'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
-                  'Open: ' + param.data[1] + '<br/>',
-                  'Close: ' + param.data[2] + '<br/>',
-                ].join('');
-              }
-            }
           },
         ]
       }
