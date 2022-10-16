@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/IndexTable.vue') }],
   },
   {
+    path: '/polls/5/vote/',
+    component: () => import('layouts/MainLayoutSt.vue'),
+    children: [{ path: '', component: () => import('pages/PageVote.vue') }],
+  },
+  {
     path: '/mytest',
     component: () => import('layouts/MainLayoutSt.vue'),
     children: [{ path: '', component: () => import('pages/IndexTableMyTest.vue') }],

@@ -1,44 +1,81 @@
 <template>
-  <div class="q-pa-md" style="max-width: 300px">
-    <div class="q-gutter-md">
-      <q-select v-model="model" :options="options" label="Standard" />
-
-      <q-select filled v-model="model" :options="options" label="Filled" />
-
-      <q-select outlined v-model="model" :options="options" label="Outlined" />
-
-      <q-select standout v-model="model" :options="options" label="Standout" />
-
-      <q-select standout="bg-teal text-white" v-model="model" :options="options" label="Custom standout" />
-
-      <q-select borderless v-model="model" :options="options" label="Borderless" />
-
-      <q-select rounded filled v-model="model" :options="options" label="Rounded filled" />
-
-      <q-select rounded outlined v-model="model" :options="options" label="Rounded outlined" />
-
-      <q-select rounded standout v-model="model" :options="options" label="Rounded standout" />
-
-      <q-select square filled v-model="model" :options="options" label="Square filled" />
-
-      <q-select square outlined v-model="model" :options="options" label="Square outlined" />
-
-      <q-select square standout v-model="model" :options="options" label="Square standout" />
-    </div>
-  </div>
+  <v-chart class="chart" :option="option" />
 </template>
 
 <script>
-import { ref } from 'vue'
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { PieChart } from 'echarts/charts';
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+} from 'echarts/components';
+import VChart, { THEME_KEY } from 'vue-echarts';
+import { ref, defineComponent } from 'vue';
 
-export default {
+use([
+  CanvasRenderer,
+  PieChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+]);
+
+export default defineComponent({
+  name: 'HelloWorld',
+  components: {
+    VChart,
+  },
+  provide: {
+    [THEME_KEY]: 'dark',
+  },
   setup() {
-    return {
-      model: ref(null),
-      options: [
-        'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
-      ]
-    }
-  }
-}
+    const option = ref({
+      title: {
+        text: 'Traffic Sources',
+        left: 'center',
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)',
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ['Direct', 'Email', 'Ad Networks', 'Video Ads', 'Search Engines'],
+      },
+      series: [
+        {
+          name: 'Traffic Sources',
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '60%'],
+          data: [
+            { value: 335, name: 'Direct' },
+            { value: 310, name: 'Email' },
+            { value: 234, name: 'Ad Networks' },
+            { value: 135, name: 'Video Ads' },
+            { value: 1548, name: 'Search Engines' },
+          ],
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    });
+
+    return { option };
+  },
+});
 </script>
+
+<style scoped>
+.chart {
+  height: 100vh;
+}
+</style>

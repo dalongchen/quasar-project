@@ -109,17 +109,13 @@ export default {
   },
   methods: {
     getPollStockPre() {
-      // console.log(vv);
       api.get('/polls/').then(res => {
         let rr = res.data.col;
         this.column = rr;
         this.rows = res.data.da;
         rr.push({ name: 10, label: '重复', field: 10 });
         this.column2 = rr;
-        console.log(rr);
-      }).catch((err) => {
-        console.log(err);
-      });
+      }).catch((err) => { console.log(err); });
     },
     getPollStockPreAdd(vv) {
       console.log(vv);
@@ -171,9 +167,9 @@ export default {
         console.log(err);
       });
     },
-    stockk(vv) {
-      console.log(vv);
-    }
+    // stockk(vv) {
+    //   console.log(vv);
+    // }
   },
   //加载完成声明周期函数  调用
   mounted() {
