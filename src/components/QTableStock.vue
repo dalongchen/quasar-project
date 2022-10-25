@@ -1,5 +1,4 @@
 <template>
-  <!-- <button v-on:click="getPollStockPreAdd('yuttpiu')">Count</button> -->
   <!-- xs=4 md中,sm=8所有方向小的padding -->
   <div class="q-pa-xs">
     <!-- <div>gu{{andOr!=='no'}}</div> -->
@@ -52,7 +51,7 @@
       </template>
       <template v-slot:body-cell-0="props">
         <q-td :props="props">
-          <a target="_blank" :href="href+props.value">
+          <a target="_blank" :href="'#/stockk/'+props.value+'/posts/'+postId">
             {{props.value}}
           </a>
         </q-td>
@@ -104,7 +103,7 @@ export default {
       inputValue: ref(''),
       inputValue2: ref(''),
       andOr: ref('no'),
-      href: '#/stockk/',
+      postId: [],
     }
   },
   methods: {
@@ -113,6 +112,8 @@ export default {
         let rr = res.data.col;
         this.column = rr;
         this.rows = res.data.da;
+        this.postId = res.data.code2;
+        // console.log(this.postId);
         rr.push({ name: 10, label: '重复', field: 10 });
         this.column2 = rr;
       }).catch((err) => { console.log(err); });
@@ -167,9 +168,6 @@ export default {
         console.log(err);
       });
     },
-    // stockk(vv) {
-    //   console.log(vv);
-    // }
   },
   //加载完成声明周期函数  调用
   mounted() {

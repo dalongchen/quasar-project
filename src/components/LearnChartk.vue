@@ -22,7 +22,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import VChart from 'vue-echarts';
 import { defineComponent, reactive, onMounted } from 'vue';
 import { api } from 'boot/axios'
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router';
 
 echarts.use([
   ToolboxComponent,
@@ -41,9 +41,14 @@ echarts.use([
 ]);
 
 export default defineComponent({
-  name: 'LearnChartk2',
+  name: 'LearnChartk',
   components: {
     VChart,
+  },
+  props: {
+    mydata: {
+      type: String
+    },
   },
   // data() {
   //   return {
@@ -51,24 +56,25 @@ export default defineComponent({
   // },
   // methods: {
   // },
-  setup() {
+  setup(props) {
+    console.log(props.mydata)
     onMounted(() => {
       api.get('/polls/5/results/', {
         params: {
-          inp: useRoute().params.id//获取路由参数
+          inp: props.mydata
         },
       }).then(res => {
         // console.log(res.data.dat, res.data.dat_yj_yg);
-        option.xAxis[0].data = res.data.dat.categoryData
-        option.xAxis[1].data = res.data.dat.categoryData
-        option.series[0].data = res.data.dat.values
-        option.dataZoom[0].startValue = res.data.dat.categoryData.length - 150
-        option.series[1].data = calculateMA(5, res.data.dat.values)
-        option.series[2].data = calculateMA(10, res.data.dat.values)
-        option.series[3].data = calculateMA(20, res.data.dat.values)
-        option.series[4].data = calculateMA(30, res.data.dat.values)
+        option.xAxis[0].data = res.data.categoryData
+        option.xAxis[1].data = res.data.categoryData
+        option.series[0].data = res.data.values
+        option.dataZoom[0].startValue = res.data.categoryData.length - 150
+        option.series[1].data = calculateMA(5, res.data.values)
+        option.series[2].data = calculateMA(10, res.data.values)
+        option.series[3].data = calculateMA(20, res.data.values)
+        option.series[4].data = calculateMA(30, res.data.values)
         option.series[5].data = res.data.dat_yj_yg
-        option.series[6].data = res.data.dat.volumes
+        option.series[6].data = res.data.volumes
         // console.log(option.series[6]);
       }).catch((err) => {
         console.log(err);
@@ -329,7 +335,7 @@ export default defineComponent({
 
 <style scoped>
 .chart {
-  height: 97vh;
+  height: 98vh;
   width: 98vw;
 }
 </style>

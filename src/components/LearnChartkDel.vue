@@ -20,9 +20,7 @@ import { UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 
 import VChart from 'vue-echarts';
-import { defineComponent, reactive, onMounted } from 'vue';
-import { api } from 'boot/axios'
-import { useRoute } from 'vue-router';
+import { defineComponent, reactive } from 'vue';
 
 echarts.use([
   ToolboxComponent,
@@ -41,9 +39,14 @@ echarts.use([
 ]);
 
 export default defineComponent({
-  name: 'LearnChartk2',
+  name: 'LearnChartkDel',
   components: {
     VChart,
+  },
+  props: {
+    mydata: {
+      type: Object
+    },
   },
   // data() {
   //   return {
@@ -51,29 +54,8 @@ export default defineComponent({
   // },
   // methods: {
   // },
-  setup() {
-    onMounted(() => {
-      api.get('/polls/5/results/', {
-        params: {
-          inp: useRoute().params.id//获取路由参数
-        },
-      }).then(res => {
-        // console.log(res.data.dat, res.data.dat_yj_yg);
-        option.xAxis[0].data = res.data.dat.categoryData
-        option.xAxis[1].data = res.data.dat.categoryData
-        option.series[0].data = res.data.dat.values
-        option.dataZoom[0].startValue = res.data.dat.categoryData.length - 150
-        option.series[1].data = calculateMA(5, res.data.dat.values)
-        option.series[2].data = calculateMA(10, res.data.dat.values)
-        option.series[3].data = calculateMA(20, res.data.dat.values)
-        option.series[4].data = calculateMA(30, res.data.dat.values)
-        option.series[5].data = res.data.dat_yj_yg
-        option.series[6].data = res.data.dat.volumes
-        // console.log(option.series[6]);
-      }).catch((err) => {
-        console.log(err);
-      });
-    });
+  setup(props) {
+    console.log(props.mydata.length2)
     function calculateMA(dayCount, data) {
       var result = [];
       // console.log(data)
@@ -145,7 +127,7 @@ export default defineComponent({
       xAxis: [
         {
           type: 'category',
-          data: [],
+          data: props.mydata.categoryData,
           // data: data.dat.categoryData,
           boundaryGap: true,
           axisLine: { onZero: false },
@@ -161,7 +143,7 @@ export default defineComponent({
         {
           type: 'category',
           gridIndex: 1,
-          data: [],
+          data: props.mydata.categoryData,
           // data: data.dat.categoryData,
           boundaryGap: true,
           axisLine: { onZero: false },
@@ -221,15 +203,14 @@ export default defineComponent({
           type: 'inside',
           xAxisIndex: [0, 1],
           zoomOnMouseWheel: 'alt',
-          startValue: 150,
-          // startValue: data.dat.categoryData.length - 150,
+          startValue: props.mydata.length2,
         },
       ],
       series: [
         {
           name: 'Dow',
           type: 'candlestick',
-          data: [],
+          data: props.mydata.values,
           // data: data.dat.values,
           itemStyle: {
             color: '#00da3c',
@@ -241,8 +222,8 @@ export default defineComponent({
         {
           name: 'MA5',
           type: 'line',
-          data: [],
-          // data: calculateMA(5, data.dat.values),
+          // data: [],
+          data: calculateMA(5, props.mydata.values),
           smooth: true,
           showSymbol: false,
           lineStyle: {
@@ -255,8 +236,8 @@ export default defineComponent({
         {
           name: 'MA10',
           type: 'line',
-          data: [],
-          // data: calculateMA(10, data.dat.values),
+          // data: [],
+          data: calculateMA(10, props.mydata.values),
           smooth: true,
           showSymbol: false,
           lineStyle: {
@@ -269,8 +250,8 @@ export default defineComponent({
         {
           name: 'MA20',
           type: 'line',
-          data: [],
-          // data: calculateMA(20, data.dat.values),
+          // data: [],
+          data: calculateMA(20, props.mydata.values),
           smooth: true,
           showSymbol: false,
           lineStyle: {
@@ -283,8 +264,8 @@ export default defineComponent({
         {
           name: 'MA30',
           type: 'line',
-          data: [],
-          // data: calculateMA(30, data.dat.values),
+          // data: [],
+          data: calculateMA(30, props.mydata.values),
           smooth: true,
           showSymbol: false,
           lineStyle: {
@@ -298,8 +279,8 @@ export default defineComponent({
           // name: 'gg',
           type: 'scatter',
           symbolSize: 12,
-          data: [],
-          // data: data.dat_yj_yg,
+          // data: [],
+          data: props.mydata.dat_yj_yg,
           tooltip: {
             position: ['0%', '0%'],
             formatter: function (param) {
@@ -317,8 +298,8 @@ export default defineComponent({
           xAxisIndex: 1,
           yAxisIndex: 1,
           stack: 'x',
-          data: [],
-          // data: data.dat.volumes,
+          // data: [],
+          data: props.mydata.volumes,
         },
       ]
     })

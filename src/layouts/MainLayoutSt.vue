@@ -3,11 +3,9 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
-
         <q-toolbar-title>
           stock lin
         </q-toolbar-title>
-
         <div>Stock v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
@@ -49,7 +47,7 @@ const linksList = [
     title: 'Discord Chat Channel',
     caption: 'chat.quasar.dev',
     icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    link: 'http://localhost:9000/#/mytest'
   },
   {
     title: 'Forum',
