@@ -3,7 +3,7 @@
   <div class="q-pa-xs">
     <!-- <div>gu{{andOr!=='no'}}</div> -->
     <q-table dense :rows="rows" :columns="column" row-key="name" :pagination="initialPagination"
-      :rows-per-page-options="[20,50,100,200,500,1000,0]" rows-per-page-label=" " :visible-columns="visibleColumns"
+      :rows-per-page-options="[20, 50, 100, 200, 500, 1000, 0]" rows-per-page-label=" " :visible-columns="visibleColumns"
       :filter="filter">
       <template v-slot:top>
         <div class="row">
@@ -19,19 +19,19 @@
               <q-select v-model="visibleColumns23" borderless dense options-dense emit-value map-options
                 :options="column2" option-value="label" options-cover hide-dropdown-icon>
               </q-select>
-              <q-icon v-if="andOr==='no'" name="search" v-on:click="getPollStockPreAdd('one')" />
+              <q-icon v-if="andOr === 'no'" name="search" v-on:click="getPollStockPreAdd('one')" />
             </template>
           </q-input>
           <q-select v-model="andOr" borderless dense options-dense emit-value map-options :options="optionsAndOr"
             options-cover hide-dropdown-icon>
           </q-select>
-          <q-select v-if="andOr!=='no'" v-model="visibleColumns22" borderless dense options-dense emit-value map-options
+          <q-select v-if="andOr !== 'no'" v-model="visibleColumns22" borderless dense options-dense emit-value map-options
             :options="column" option-value="label" options-cover hide-dropdown-icon>
           </q-select>
-          <q-select v-if="andOr!=='no'" v-model="modelSingle2" borderless dense options-dense emit-value map-options
+          <q-select v-if="andOr !== 'no'" v-model="modelSingle2" borderless dense options-dense emit-value map-options
             :options="options" options-cover hide-dropdown-icon>
           </q-select>
-          <q-input v-if="andOr!=='no'" v-model="inputValue2" borderless dense debounce="300" placeholder="?" clearable
+          <q-input v-if="andOr !== 'no'" v-model="inputValue2" borderless dense debounce="300" placeholder="?" clearable
             input-style="padding: 0px;width:5vw">
             <template v-slot:append>
               <q-icon name="search" v-on:click="getPollStockPreAdd('two')" />
@@ -49,34 +49,35 @@
           </q-select>
         </div>
       </template>
+
       <template v-slot:body-cell-0="props">
         <q-td :props="props">
-          <a target="_blank" :href="'#/stockk/'+props.value+'/posts/'+postId">
-            {{props.value}}
+          <a target="_blank" :href="'#/stockk/' + props.value + '/posts/' + postId">
+            {{ props.value }}
           </a>
         </q-td>
       </template>
       <template v-slot:body-cell-2="props">
         <q-td :props="props">
           <div v-if="props.value !== null" style="font-style:italic;">
-            {{props.value.slice(0,4)}}
-            <q-tooltip :delay="500" :offset="[0, 10]">{{props.value}}</q-tooltip>
+            {{ props.value.slice(0, 4) }}
+            <q-tooltip :delay="500" :offset="[0, 10]">{{ props.value }}</q-tooltip>
           </div>
         </q-td>
       </template>
       <template v-slot:body-cell-3="props">
         <q-td :props="props">
           <div v-if="props.value !== null" style="font-style:italic;">
-            {{props.value.slice(0,15)}}
-            <q-tooltip :delay="500" :offset="[0, 0]">{{props.value}}</q-tooltip>
+            {{ props.value.slice(0, 15) }}
+            <q-tooltip :delay="500" :offset="[0, 0]">{{ props.value }}</q-tooltip>
           </div>
         </q-td>
       </template>
       <template v-slot:body-cell-6="props">
         <q-td :props="props">
           <div v-if="props.value !== null" style="font-style:italic;">
-            {{props.value.slice(0,20)}}
-            <q-tooltip :delay="1000" :offset="[0, 10]">{{props.value}}</q-tooltip>
+            {{ props.value.slice(0, 20) }}
+            <q-tooltip :delay="1000" :offset="[0, 10]">{{ props.value }}</q-tooltip>
           </div>
         </q-td>
       </template>

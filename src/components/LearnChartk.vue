@@ -57,7 +57,7 @@ export default defineComponent({
   // methods: {
   // },
   setup(props) {
-    console.log(props.mydata)
+    // console.log(props.mydata)
     onMounted(() => {
       api.get('/polls/5/results/', {
         params: {

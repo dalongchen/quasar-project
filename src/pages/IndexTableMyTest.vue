@@ -1,13 +1,13 @@
 <template>
-  <q-page class="">
-    <QTableStock2></QTableStock2>
-  </q-page>
+  <!-- <q-page class=""> -->
+  <MyTest></MyTest>
+  <!-- </q-page> -->
 </template>
 
 <script>
-import QTableStock2 from 'components/QTableStock2.vue';
+import MyTest from 'src/components/MyTest.vue';
 export default {
   name: 'IndexTableMyTest',
-  components: { QTableStock2 }
+  components: { MyTest }
 }
 </script>

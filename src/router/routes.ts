@@ -25,7 +25,6 @@ const routes: RouteRecordRaw[] = [
     path: '/mytest',
     component: () => import('layouts/MainLayoutSt.vue'),
     children: [{ path: '', component: () => import('pages/IndexTableMyTest.vue') }],
-    // component: () => import('layouts/MyTestLayout.vue'),
   },
   {
     path: '/:catchAll(.*)*',

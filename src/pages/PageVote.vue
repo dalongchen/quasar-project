@@ -1,26 +1,32 @@
 <template>
-  <q-page class="row items-center justify-evenly">666
-  </q-page>
+  <TableStock :data="data"></TableStock>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import TableStock from 'components/TableStock.vue';
+import { defineComponent, reactive } from 'vue';
 import { api } from 'boot/axios'
 
 export default defineComponent({
   name: 'PageVote',
-  components: {},
+  components: { TableStock },
   setup() {
+    let data = reactive({ col: [], da: [], code2: [], names: [] });
     api.get('/polls/5/vote/', {
       params: {
         inp: ''
       },
     }).then(res => {
-      console.log(res.data);
+      data.col = res.data.col
+      data.da = res.data.da
+      data.code2 = res.data.code2
+      data.names = res.data.col.map(function (user) { return user.name; });
+      // console.log(names);
     }).catch((err) => {
       console.log(err);
     });
-    return {};
+    // console.log(data);
+    return { data };
   }
 });
 </script>
