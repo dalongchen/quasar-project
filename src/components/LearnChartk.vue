@@ -22,7 +22,6 @@ import { CanvasRenderer } from 'echarts/renderers';
 import VChart from 'vue-echarts';
 import { defineComponent, reactive, onMounted } from 'vue';
 import { api } from 'boot/axios'
-// import { useRoute } from 'vue-router';
 
 echarts.use([
   ToolboxComponent,
@@ -50,12 +49,6 @@ export default defineComponent({
       type: String
     },
   },
-  // data() {
-  //   return {
-  //   }
-  // },
-  // methods: {
-  // },
   setup(props) {
     // console.log(props.mydata)
     onMounted(() => {
@@ -64,7 +57,6 @@ export default defineComponent({
           inp: props.mydata
         },
       }).then(res => {
-        // console.log(res.data.dat, res.data.dat_yj_yg);
         option.xAxis[0].data = res.data.categoryData
         option.xAxis[1].data = res.data.categoryData
         option.series[0].data = res.data.values
@@ -75,7 +67,7 @@ export default defineComponent({
         option.series[4].data = calculateMA(30, res.data.values)
         option.series[5].data = res.data.dat_yj_yg
         option.series[6].data = res.data.volumes
-        // console.log(option.series[6]);
+        // console.log(res.data.values);
       }).catch((err) => {
         console.log(err);
       });
@@ -98,6 +90,7 @@ export default defineComponent({
     };
     function mousemoveOrNone() {
       option.tooltip.axisPointer.type = (option.tooltip.axisPointer.type == 'none') ? 'cross' : 'none'
+      option.tooltip.triggerOn = (option.tooltip.triggerOn == 'click') ? 'mousemove' : 'click'
     };
     const option = reactive({
       animation: false,
@@ -109,11 +102,30 @@ export default defineComponent({
         axisPointer: {
           type: 'none',
         },
-        padding: 1,
+        triggerOn: 'click',
+        showDelay: 500,
+        confine: true,
+        padding: 0,
         textStyle: {
-          fontSize: 14,
+          fontSize: 12,
           color: '#000'
         },
+        formatter: function (param) {
+          // console.log(param)'amount', 'amplitude', 'up_change', 'num_change', 'turnover'
+          return [
+            '' + param.name + '<hr size=1 style="margin: 3px 0">',
+            'open: ' + param.data[2] + '<br/>',
+            'close: ' + param.data[1] + '<br/>',
+            'lowest: ' + param.data[3] + '<br/>',
+            'highest: ' + param.data[4] + '<br/>',
+            'volume: ' + (param.data[5] / 10000).toFixed(1) + 'w<br/>',
+            'amount: ' + (param.data[6] / 10000).toFixed(1) + 'w<br/>',
+            'amplitude: ' + param.data[7] + '<br/>',
+            'up_change: ' + param.data[8] + '<br/>',
+            'num_change: ' + param.data[9] + '<br/>',
+            'turnover: ' + param.data[10] + '<br/>',
+          ].join('');
+        }
       },
       axisPointer: {
         snap: true,
@@ -325,10 +337,16 @@ export default defineComponent({
           stack: 'x',
           data: [],
           // data: data.dat.volumes,
+          tooltip: {
+            show: false,
+          }
         },
       ]
-    })
-    return { option, mousemoveOrNone }
+    });
+    function onKey({ evt, ...newInfo }) {
+      console.log(evt, newInfo)
+    };
+    return { option, mousemoveOrNone, onKey }
   },
 });
 </script>
