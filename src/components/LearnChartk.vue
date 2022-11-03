@@ -1,7 +1,8 @@
 <template >
-  <div @dblclick="mousemoveOrNone()">
+  <q-card class="custom-area" v-touch-repeat:0:100.left.right.38.40="handleRepeat" tabindex="0"
+    @dblclick="mousemoveOrNone()" v-focus>
     <v-chart class="chart" :option="option" />
-  </div>
+  </q-card>
 </template>
   
 <script>
@@ -20,7 +21,7 @@ import { UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 
 import VChart from 'vue-echarts';
-import { defineComponent, reactive, onMounted } from 'vue';
+import { defineComponent, reactive, onMounted, ref } from 'vue';
 import { api } from 'boot/axios'
 
 echarts.use([
@@ -38,11 +39,17 @@ echarts.use([
   CanvasRenderer,
   UniversalTransition
 ]);
-
+const focus = {
+  mounted: (el) => el.focus()
+}
 export default defineComponent({
   name: 'LearnChartk',
   components: {
     VChart,
+  },
+  directives: {
+    // 在模板中启用 v-focus
+    focus
   },
   props: {
     mydata: {
@@ -51,6 +58,7 @@ export default defineComponent({
   },
   setup(props) {
     // console.log(props.mydata)
+    let da_num = ref(0);
     onMounted(() => {
       api.get('/polls/5/results/', {
         params: {
@@ -60,7 +68,9 @@ export default defineComponent({
         option.xAxis[0].data = res.data.categoryData
         option.xAxis[1].data = res.data.categoryData
         option.series[0].data = res.data.values
+        da_num.value = res.data.categoryData.length
         option.dataZoom[0].startValue = res.data.categoryData.length - 150
+        option.dataZoom[0].endValue = res.data.categoryData.length
         option.series[1].data = calculateMA(5, res.data.values)
         option.series[2].data = calculateMA(10, res.data.values)
         option.series[3].data = calculateMA(20, res.data.values)
@@ -239,8 +249,8 @@ export default defineComponent({
           type: 'inside',
           xAxisIndex: [0, 1],
           zoomOnMouseWheel: 'alt',
-          startValue: 150,
-          // startValue: data.dat.categoryData.length - 150,
+          startValue: 0,
+          endValue: 150
         },
       ],
       series: [
@@ -343,18 +353,73 @@ export default defineComponent({
         },
       ]
     });
-    function onKey({ evt, ...newInfo }) {
-      console.log(evt, newInfo)
-    };
-    return { option, mousemoveOrNone, onKey }
+    function handleRepeat({ evt }) {
+      // console.log(evt)
+      // console.log(evt.keyCode)
+      switch (evt.keyCode) {
+        case 38: // ArrowUp 开始值小于数据长度还能加
+          if (option.dataZoom[0].endValue != da_num.value) {
+            option.dataZoom[0].endValue = da_num.value
+          }
+          if (option.dataZoom[0].startValue <= (da_num.value - 50)) {
+            option.dataZoom[0].startValue += 200
+          }
+          // console.log(option.dataZoom[0].startValue, option.dataZoom[0].endValue)
+          break
+        case 40: // ArrowDown 开始值大于0还能减
+          if (option.dataZoom[0].endValue != da_num.value) {
+            option.dataZoom[0].endValue = da_num.value
+          }
+          if (option.dataZoom[0].startValue >= 50) {
+            option.dataZoom[0].startValue -= 200
+          }
+          break
+        case 37: // left 开始值大于0还能减
+          // console.log(option.dataZoom[0].startValue, option.dataZoom[0].endValue)
+          if (option.dataZoom[0].startValue >= 0) {
+            option.dataZoom[0].startValue -= 20
+          }
+          if (option.dataZoom[0].endValue >= 0) {
+            option.dataZoom[0].endValue -= 20
+          }
+          break
+        case 39: // right 开始值小于数据长度还能加
+          // console.log(option.dataZoom[0].startValue, option.dataZoom[0].endValue)
+          if (option.dataZoom[0].startValue <= (da_num.value - 50)) {
+            option.dataZoom[0].startValue += 20
+          }
+          if (option.dataZoom[0].endValue <= (da_num.value)) {
+            option.dataZoom[0].endValue += 20
+          }
+          break
+        case 36: // Home
+          break
+        case 35: // End
+          break
+        case 33: // PageUp
+          break
+        case 34: // PageDown
+          break
+
+
+      }
+    }
+
+    return { option, mousemoveOrNone, handleRepeat }
   },
 });
 </script>
 
 <style scoped>
 .chart {
-  height: 98vh;
+  height: 82vh;
   width: 98vw;
 }
+</style>
+<style lang="sass" scoped>
+.custom-area
+  &:focus
+    outline: 0px 
+    outline-offset: 0px
 </style>
   
