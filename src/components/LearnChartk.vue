@@ -57,7 +57,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    // console.log(props.mydata)
+    console.log(props.mydata, 'uu')
     let da_num = ref(0);
     onMounted(() => {
       api.get('/polls/5/results/', {

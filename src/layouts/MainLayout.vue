@@ -3,16 +3,14 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
-
         <q-toolbar-title>
-          stock
+          stock lin
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <div>Stock v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="200" :breakpoint="1500">
       <q-list>
         <q-item-label header>
           Essential Links
@@ -37,19 +35,19 @@ const linksList = [
     title: 'Docs',
     caption: 'quasar.dev',
     icon: 'school',
-    link: 'https://quasar.dev'
+    link: 'http://localhost:9000/#/tab'
   },
   {
     title: 'Github',
     caption: 'github.com/quasarframework',
     icon: 'code',
-    link: 'https://github.com/quasarframework'
+    link: 'http://localhost:9000/#/polls/5/vote/'
   },
   {
     title: 'Discord Chat Channel',
     caption: 'chat.quasar.dev',
     icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    link: 'http://localhost:9000/#/mytest'
   },
   {
     title: 'Forum',

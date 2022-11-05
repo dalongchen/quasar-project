@@ -16,7 +16,7 @@
 
       <template v-slot:body-cell-0="props">
         <q-td :props="props">
-          <a target="_blank" :href="'#/stockk/' + props.value + '/posts/' + postId">
+          <a target="_blank" :href="'#/stockk/' + props.value + '/code2/' + code2 + '/name2/' + name2">
             {{ props.value }}
           </a>
         </q-td>
@@ -56,89 +56,6 @@ import { toRef, ref } from 'vue'
 
 export default {
   name: 'TableStock',
-  // data() {
-  //   return {
-  //     column: [],
-  //     column2: [],
-  //     rows: [],
-  //     modelSingle: ref('like'),
-  //     modelSingle2: ref('like'),
-  //     visibleColumns2: ref('股票代码'),
-  //     visibleColumns22: ref('股票代码'),
-  //     visibleColumns23: ref('重复'),
-  //     inputValue: ref(''),
-  //     inputValue2: ref(''),
-  //     andOr: ref('no'),
-  //     postId: [],
-  //   }
-  // },
-  // methods: {
-  //   getPollStockPre() {
-  //     api.get('/polls/').then(res => {
-  //       let rr = res.data.col;
-  //       this.column = rr;
-  //       this.rows = res.data.da;
-  //       this.postId = res.data.code2;
-  //       // console.log(this.postId);
-  //       rr.push({ name: 10, label: '重复', field: 10 });
-  //       this.column2 = rr;
-  //     }).catch((err) => { console.log(err); });
-  //   },
-  //   getPollStockPreAdd(vv) {
-  //     console.log(vv);
-  //     let col;
-  //     if (this.visibleColumns2 === '类型') {
-  //       col = '预告类型'
-  //     } else if (this.visibleColumns2 === '幅度') {
-  //       col = '业绩变动幅度'
-  //     } else {
-  //       col = this.visibleColumns2
-  //     };
-  //     let repace2;
-  //     if (this.visibleColumns23 === '重复') {
-  //       repace2 = ''
-  //     } else {
-  //       repace2 = ' GROUP BY ' + this.visibleColumns23
-  //     }
-  //     let tota1;
-  //     if (this.modelSingle === 'like') {
-  //       tota1 = col + ' ' + this.modelSingle + " '%" + this.inputValue + "%' " + repace2
-  //     } else {
-  //       tota1 = col + this.modelSingle + "'" + this.inputValue + "' " + repace2
-  //     }
-  //     console.log(tota1)
-
-  //     if (vv === 'two') {
-  //       let col2;
-  //       if (this.visibleColumns22 === '类型') {
-  //         col2 = '预告类型'
-  //       } else if (this.visibleColumns22 === '幅度') {
-  //         col2 = '业绩变动幅度'
-  //       } else {
-  //         col2 = this.visibleColumns22
-  //       };
-
-  //       if (this.modelSingle2 === 'like') {
-  //         tota1 = col2 + ' ' + this.modelSingle2 + " '%" + this.inputValue2 + "%' " + this.andOr + ' ' + tota1
-  //       } else {
-  //         tota1 = col2 + this.modelSingle2 + "'" + this.inputValue2 + "' " + this.andOr + ' ' + tota1
-  //       }
-  //       console.log(tota1)
-  //     }
-  //     api.get('/polls/5/', {
-  //       params: { tota: tota1 }
-  //     }).then(res => {
-  //       this.rows = res.data.dat;
-  //       console.log(res.data);
-  //     }).catch((err) => {
-  //       console.log(err);
-  //     });
-  //   },
-  // },
-  //加载完成声明周期函数  调用
-  // mounted() {
-  //   this.getPollStockPre()
-  // },
   props: {
     data: {
       type: Object
@@ -148,14 +65,18 @@ export default {
     let rows = toRef(props.data, 'da')
     let columns = toRef(props.data, 'col')
     let visibleColumns = toRef(props.data, 'names')
-    let postId = toRef(props.data, 'code2')
-    console.log(postId);
+    let code2 = toRef(props.data, 'code2')
+    let name2 = toRef(props.data, 'name2')
+    // console.log(props.data);
+    Object.freeze(code2)
+    Object.freeze(name2)
     return {
       rows,
       columns,
       visibleColumns,
       filter: ref(''),
-      postId
+      code2,
+      name2,
     }
   }
 }
@@ -163,7 +84,7 @@ export default {
 <style lang="sass">
 .my-sticky-header-table
   /* height or max-height is important */
-  height: 410px
+  height: 29.85rem
 
   .q-table__top,
   .q-table__bottom,
