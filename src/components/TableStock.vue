@@ -7,28 +7,30 @@
       <template v-slot:top-right>
         <q-btn label="search" @click="prompt = true" />
         <q-dialog v-model="prompt">
-          <div class="q-gutter-xs">
+          <q-card>
+            <!-- <div class="q-gutter-xs"> -->
             <q-form @submit="onSubmit" @reset="onReset">
               <q-select label="季度" filled v-model="quarter" :options="opt" dense options-dense multiple />
 
               <div class="row" style="max-width: 50rem;">
                 <div class="col-2">
                   <q-input dense filled type="number" v-model="day_num" label="天数" lazy-rules
-                    :rules="[val => val !== null && val !== '' || 'Please type ', val => val > 0 && val < 300 || 'Please type']" />
+                    :rules="[val => val !== null && val !== '' || 'Please type ', val => val > 0 && val < 1300 || 'Please type']" />
                 </div>
                 <div class="col-2">
                   <q-input dense filled type="number" v-model="up_num" label="正幅度" lazy-rules
-                    :rules="[val => val !== null && val !== '' || 'Please type ', val => val > 0 && val < 100 || 'Please type']" />
+                    :rules="[val => val !== null && val !== '' || 'Please type ', val => val > -2 && val < 100 || 'Please type']" />
                 </div>
                 <div class="col-2">
                   <q-input dense filled type="number" v-model="down_num" label="负幅度" lazy-rules
-                    :rules="[val => val !== null && val !== '' || 'Please type ', val => val > -100 && val < 0 || 'Please type']" />
+                    :rules="[val => val !== null && val !== '' || 'Please type ', val => val > -100 && val < 2 || 'Please type']" />
                 </div>
               </div>
               <q-btn dense label="Submit" type="submit" flat class="q-ml-xs" />
               <q-btn dense label="Reset" type="reset" flat class="q-ml-xs" />
             </q-form>
-          </div>
+            <!-- </div> -->
+          </q-card>
         </q-dialog>
         <q-select v-model="visibleColumns" multiple outlined dense options-dense :display-value="$q.lang.table.columns"
           emit-value map-options :options="columns" option-value="name" options-cover style="min-width: 150px" />
@@ -122,9 +124,9 @@ export default {
 
     // const quarter = ref('2020年1-3,2020年1-6')
     const quarter = ref([])
-    const day_num = ref(122)
-    const up_num = ref(15)
-    const down_num = ref(-15)
+    const day_num = ref(2)
+    const up_num = ref(5)
+    const down_num = ref(-5)
     function onSubmit() {
       // console.log(quarter.value[0] == 'all', opt.slice(0, opt.length - 1));
       if (quarter.value[0] == 'all') {
@@ -158,14 +160,21 @@ export default {
           down_num: down_num.value,
         },
       }).then(res => {
+        rows.length = 0
+        columns.length = 0
+        code2.length = 0
+        name2.length = 0
+        visibleColumns.length = 0
+        // console.log(rows.length)
         rows.push(...res.data.da)
         columns.push(...res.data.col)
         code2.push(...res.data.code2)
         name2.push(...res.data.name2)
         visibleColumns.push(...res.data.col.map(function (user) { return user.name; }))
-        Object.freeze(name2)
-        Object.freeze(code2)
-        Object.freeze(visibleColumns)
+        // console.log(code2.length)
+        // Object.freeze(name2)
+        // Object.freeze(code2)
+        // Object.freeze(visibleColumns)
       }).catch((err) => {
         console.log(err);
       });
