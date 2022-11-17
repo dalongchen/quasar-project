@@ -53,7 +53,7 @@ const linksList = [
     title: 'Forum',
     caption: 'forum.quasar.dev',
     icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+    link: 'http://localhost:9000/#/polls/stockYjbbEm/'
   },
   {
     title: 'Twitter',
