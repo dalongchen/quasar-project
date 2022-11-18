@@ -12,6 +12,11 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('src/pages/PageStockk2.vue') }],
   },
   {
+    path: '/stockStandardk/:id/code2/:code2/name2/:name2',
+    component: () => import('layouts/MainLayoutSt.vue'),
+    children: [{ path: '', component: () => import('src/pages/PageStockStandardk.vue') }],
+  },
+  {
     path: '/tab',
     component: () => import('layouts/MainLayoutSt.vue'),
     children: [{ path: '', component: () => import('pages/IndexTable.vue') }],
@@ -25,6 +30,11 @@ const routes: RouteRecordRaw[] = [
     path: '/polls/stockYjbbEm/',
     component: () => import('layouts/MainLayoutSt.vue'),
     children: [{ path: '', component: () => import('pages/PageStockYjbbEm.vue') }],
+  },
+  {
+    path: '/polls/zhangTing/',
+    component: () => import('layouts/MainLayoutSt.vue'),
+    children: [{ path: '', component: () => import('pages/PageZhangTing.vue') }],
   },
   {
     path: '/mytest',

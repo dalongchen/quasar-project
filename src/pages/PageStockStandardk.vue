@@ -2,21 +2,21 @@
   <q-carousel v-model="slide" vertical transition-prev="slide-down" transition-next="slide-up" swipeable animated
     control-color="white" navigation-icon="radio_button_unchecked" padding arrows height="32rem"
     class="text-white shadow-1 rounded-borders" keep-alive infinite>
-    <q-carousel-slide :name="data" class="column no-wrap flex-center" v-for='(data, index ) in code2' :key="index">
+    <q-carousel-slide :name="data" class="column no-wrap flex-center" v-for='(data, index) in code2' :key="index">
       {{ name2[index] }}{{ data }}
-      <LearnChartk :mydata="data"></LearnChartk>
+      <StockStandardk :mydata="data"></StockStandardk>
     </q-carousel-slide>
   </q-carousel>
 </template>
 
 <script>
-import LearnChartk from 'src/components/LearnChartk.vue';
+import StockStandardk from 'src/components/StockStandardk.vue';
 import { defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
 
 export default defineComponent({
-  name: 'PageStockk2',
-  components: { LearnChartk },
+  name: 'PageStockStandardk',
+  components: { StockStandardk },
   data() {
     return {
       code2: [],

@@ -32,34 +32,34 @@ import EssentialLink from 'components/EssentialLink.vue';
 
 const linksList = [
   {
-    title: 'Docs',
+    title: 'tab',
     caption: 'quasar.dev',
     icon: 'school',
     link: 'http://localhost:9000/#/tab'
   },
   {
-    title: 'Github',
+    title: 'vote',
     caption: 'github.com/quasarframework',
     icon: 'code',
     link: 'http://localhost:9000/#/polls/5/vote/'
   },
   {
-    title: 'Discord Chat Channel',
+    title: 'mytest',
     caption: 'chat.quasar.dev',
     icon: 'chat',
     link: 'http://localhost:9000/#/mytest'
   },
   {
-    title: 'Forum',
+    title: 'stockYjbbEm',
     caption: 'forum.quasar.dev',
     icon: 'record_voice_over',
     link: 'http://localhost:9000/#/polls/stockYjbbEm/'
   },
   {
-    title: 'Twitter',
+    title: 'zhangTing',
     caption: '@quasarframework',
     icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
+    link: 'http://localhost:9000/#/polls/zhangTing/'
   },
   {
     title: 'Facebook',

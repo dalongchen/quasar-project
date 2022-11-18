@@ -43,7 +43,7 @@ const focus = {
   mounted: (el) => el.focus()
 }
 export default defineComponent({
-  name: 'LearnChartk',
+  name: 'StockStandardk',
   components: {
     VChart,
   },
@@ -60,7 +60,7 @@ export default defineComponent({
     console.log(props.mydata, 'uu')
     let da_num = ref(0);
     onMounted(() => {
-      api.get('/polls/5/results/', {
+      api.get('/polls/5/stockStandardk/', {
         params: {
           inp: props.mydata
         },

@@ -1,7 +1,9 @@
 <template>
   <div class="q-pa-md">
     <div class="q-gutter-md row items-start">
-      <q-select filled v-model="multiple" multiple :options="options" label="Multiple" style="width: 50px" />
+      <q-date v-model="date" />
+
+      <!-- <q-date v-model="date" minimal /> -->
     </div>
   </div>
 </template>
@@ -12,11 +14,8 @@ import { ref } from 'vue'
 export default {
   setup() {
     return {
-      multiple: ref(null),
-
-      options: [
-        'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
-      ]
+      date: ref()
+      // date: ref('2019/02/01')
     }
   }
 }

@@ -9,7 +9,8 @@
         <q-dialog v-model="prompt">
           <q-card>
             <q-form @submit="onSubmit" @reset="onReset">
-              <q-select label="季度" filled v-model="quarter" :options="opt" dense options-dense multiple />
+              <q-date v-model="date" />
+              <!-- <q-select label="季度" filled v-model="quarter" :options="opt" dense options-dense multiple /> -->
 
               <div class="row" style="max-width: 50rem;">
                 <div class="col-2">
@@ -41,7 +42,7 @@
 
       <template v-slot:body-cell-0="props">
         <q-td :props="props">
-          <a target="_blank" :href="'#/stockStandardk/' + props.value + '/code2/' + code2 + '/name2/' + name2">
+          <a target="_blank" :href="'#/stockk/' + props.value + '/code2/' + code2 + '/name2/' + name2">
             {{ props.value }}
           </a>
         </q-td>
@@ -57,7 +58,7 @@ import { reactive, ref } from 'vue'
 import { api } from 'boot/axios'
 
 export default {
-  name: 'TableStockYjbbEm',
+  name: 'TableZhangTing',
   // props: {
   //   data: {
   //     type: Object
@@ -71,25 +72,15 @@ export default {
     let code2 = reactive([])
     let name2 = reactive([])
     let visibleColumns = reactive([])
-    let opt = [
-      '20211231',
-      '20201231',
-      '20191231',
-      'all'
-    ]
-
-    // const quarter = ref('2020年1-3,2020年1-6')
-    const quarter = ref(['20211231'])
+    const date = ref([])
     const day_num = ref(1)
     const up_num = ref(19)
     const down_num = ref(-5)
     function onSubmit() {
-      if (quarter.value[0] == 'all') {
-        quarter.value = opt.slice(0, opt.length - 1)
-      }
-      api.get('/polls/stockYjbbEm/', {
+      console.log(date)
+      api.get('/polls/zhangTing/', {
         params: {
-          quarter: quarter,
+          quarter: date,
           // quarter: quarter.value,
           day_num: day_num.value,
           up_num: up_num.value,
@@ -114,7 +105,7 @@ export default {
     };
     // onSubmit();
     function onReset() {
-      quarter.value = null
+      date.value = null
       day_num.value = null
       up_num.value = null
       down_num.value = null
@@ -128,10 +119,9 @@ export default {
       filter: ref(''),
 
       prompt: ref(false),
-      opt,
       onSubmit,
       onReset,
-      quarter,
+      date,
       day_num,
       up_num,
       down_num,
@@ -142,7 +132,7 @@ export default {
 <style lang="sass">
 .my-sticky-header-table
   /* height or max-height is important */
-  height: 33.5rem
+  height: 33.85rem
 
   .q-table__top,
   .q-table__bottom,
