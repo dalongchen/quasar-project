@@ -2,7 +2,7 @@
   <!-- xs=4 md中,sm=8所有方向小的padding -->
   <div class="q-pa-xs">
     <q-table class="my-sticky-header-table" title="Treats" :rows="rows" :columns="columns" row-key="name" flat bordered
-      dense :rows-per-page-options="[20, 50, 100, 200, 500, 1000, 0]" rows-per-page-label=" "
+      dense :rows-per-page-options="[50, 100, 200, 500, 1000, 0]" rows-per-page-label=" "
       :visible-columns="visibleColumns" :filter="filter">
       <template v-slot:top-right>
         <q-btn label="search" @click="prompt = true" />
@@ -10,8 +10,30 @@
           <q-card>
             <q-form @submit="onSubmit" @reset="onReset">
               <q-date v-model="date" />
-              <!-- <q-select label="季度" filled v-model="quarter" :options="opt" dense options-dense multiple /> -->
-
+              <div class="row" style="max-width: 50rem;">
+                <div class="col-2">
+                  <q-input dense filled type="number" v-model="day_num" label="连续年数" lazy-rules
+                    :rules="[val => val !== null && val !== '' || 'Please type ', val => val > 0 && val < 5 || 'Please type']" />
+                </div>
+                <div class="col-2">
+                  <q-input dense filled type="number" v-model="up_num" label="净资产收益率" lazy-rules
+                    :rules="[val => val !== null && val !== '' || 'Please type ', val => val > 0 && val < 100 || 'Please type']" />
+                </div>
+                <div class="col-2">
+                  <q-input dense filled type="number" v-model="down_num" label="负幅度" lazy-rules
+                    :rules="[val => val !== null && val !== '' || 'Please type ', val => val > -100 && val < 2 || 'Please type']" />
+                </div>
+              </div>
+              <q-btn dense label="Submit" type="submit" flat class="q-ml-xs" />
+              <q-btn dense label="Reset" type="reset" flat class="q-ml-xs" />
+            </q-form>
+          </q-card>
+        </q-dialog>
+        <q-btn label="更新k" @click="prompt_k = true" />
+        <q-dialog v-model="prompt_k">
+          <q-card>
+            <q-form @submit="onSubmit_k" @reset="onReset_k">
+              <q-date v-model="date" />
               <div class="row" style="max-width: 50rem;">
                 <div class="col-2">
                   <q-input dense filled type="number" v-model="day_num" label="连续年数" lazy-rules
@@ -42,7 +64,7 @@
 
       <template v-slot:body-cell-0="props">
         <q-td :props="props">
-          <a target="_blank" :href="'#/stockk/' + props.value + '/code2/' + code2 + '/name2/' + name2">
+          <a target="_blank" :href="'#/stockStandardk/' + props.value + '/code2/' + code2 + '/name2/' + name2">
             {{ props.value }}
           </a>
         </q-td>
@@ -103,8 +125,30 @@ export default {
         console.log(err);
       });
     };
+    function onSubmit_k() {
+      console.log(date)
+      api.get('/polls/update_day_k/', {
+        params: {
+          quarter: date,
+          // quarter: quarter.value,
+          day_num: day_num.value,
+          up_num: up_num.value,
+          down_num: down_num.value,
+        },
+      }).then(res => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err);
+      });
+    };
     // onSubmit();
     function onReset() {
+      date.value = null
+      day_num.value = null
+      up_num.value = null
+      down_num.value = null
+    }
+    function onReset_k() {
       date.value = null
       day_num.value = null
       up_num.value = null
@@ -119,8 +163,11 @@ export default {
       filter: ref(''),
 
       prompt: ref(false),
+      prompt_k: ref(false),
       onSubmit,
+      onSubmit_k,
       onReset,
+      onReset_k,
       date,
       day_num,
       up_num,

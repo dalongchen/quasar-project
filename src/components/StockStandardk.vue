@@ -69,13 +69,13 @@ export default defineComponent({
         option.xAxis[1].data = res.data.categoryData
         option.series[0].data = res.data.values
         da_num.value = res.data.categoryData.length
-        option.dataZoom[0].startValue = res.data.categoryData.length - 150
+        option.dataZoom[0].startValue = res.data.categoryData.length - 350
         option.dataZoom[0].endValue = res.data.categoryData.length
         option.series[1].data = calculateMA(5, res.data.values)
         option.series[2].data = calculateMA(10, res.data.values)
         option.series[3].data = calculateMA(20, res.data.values)
         option.series[4].data = calculateMA(30, res.data.values)
-        option.series[5].data = res.data.dat_yj_yg
+        // option.series[5].data = res.data.dat_yj_yg
         option.series[6].data = res.data.volumes
         // console.log(res.data.values);
       }).catch((err) => {
@@ -124,8 +124,8 @@ export default defineComponent({
           // console.log(param)'amount', 'amplitude', 'up_change', 'num_change', 'turnover'
           return [
             '' + param.name + '<hr size=1 style="margin: 3px 0">',
-            'open: ' + param.data[2] + '<br/>',
-            'close: ' + param.data[1] + '<br/>',
+            'open: ' + param.data[1] + '<br/>',
+            'close: ' + param.data[2] + '<br/>',
             'lowest: ' + param.data[3] + '<br/>',
             'highest: ' + param.data[4] + '<br/>',
             'volume: ' + (param.data[5] / 10000).toFixed(1) + 'w<br/>',
@@ -260,10 +260,10 @@ export default defineComponent({
           data: [],
           // data: data.dat.values,
           itemStyle: {
-            color: '#00da3c',
-            color0: '#ec0000',
-            borderColor: '#0CF49B',
-            borderColor0: '#FD1050'
+            color0: '#00da3c',
+            color: '#ec0000',
+            borderColor0: '#0CF49B',
+            borderColor: '#FD1050'
           },
         },
         {
