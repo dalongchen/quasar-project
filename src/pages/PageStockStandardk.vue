@@ -63,7 +63,8 @@ export default defineComponent({
       } else {
         dat = 'sz' + dat
       }
-      return 'https://emweb.securities.eastmoney.com/NewFinanceAnalysis/Index?type=web&code=' + dat
+      return 'https://emweb.securities.eastmoney.com/OperationsRequired/Index?type=web&code=' + dat
+      // return 'https://emweb.securities.eastmoney.com/NewFinanceAnalysis/Index?type=web&code=' + dat
     }
   }
   // setup() {

@@ -34,6 +34,7 @@
           <q-card>
             <q-form @submit="onSubmit_k" @reset="onReset_k">
               <q-date v-model="date" />
+              <q-select label="复权" filled v-model="fq" :options="opt" dense options-dense />
               <div class="row" style="max-width: 50rem;">
                 <div class="col-2">
                   <q-input dense filled type="number" v-model="day_num" label="连续年数" lazy-rules
@@ -89,6 +90,12 @@ export default {
   // setup(props) {
   setup() {
     //   let rows = toRef(props.data, 'da')
+    const fq = ref('不复权')
+    let opt = [
+      '不复权',
+      '后复权',
+      '不复+后复权',
+    ]
     let rows = reactive([])
     let columns = reactive([])
     let code2 = reactive([])
@@ -130,10 +137,8 @@ export default {
       api.get('/polls/update_day_k/', {
         params: {
           quarter: date,
+          fq: fq,
           // quarter: quarter.value,
-          day_num: day_num.value,
-          up_num: up_num.value,
-          down_num: down_num.value,
         },
       }).then(res => {
         console.log(res)
@@ -154,6 +159,7 @@ export default {
       up_num.value = null
       down_num.value = null
     }
+
     return {
       rows,
       columns,
@@ -172,6 +178,8 @@ export default {
       day_num,
       up_num,
       down_num,
+      fq,
+      opt
     }
   }
 }
