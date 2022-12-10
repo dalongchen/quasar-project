@@ -1,15 +1,18 @@
 <template>
-  <q-btn :label="flatLable" @click="prompt = true" />
+  <q-btn :label="flatLable" @click="promptNow" />
   <q-dialog v-model="prompt">
-    <q-card>
+    <q-card class="my-card">
       <q-form @submit="onSubmit" @reset="onReset">
-        <q-date v-model="date" />
+        <q-date v-model="date" landscape minimal :options="optionsFn" />
         <div class="row" style="max-width: 50rem;">
-          <div class="col-2">
+          <div class="col-auto">
+            <q-select label="复权" filled v-model="fq" :options="opt" dense options-dense />
+          </div>
+          <div class="col">
             <q-input dense filled type="number" v-model="day_num" label="连续年数" lazy-rules
               :rules="[val => val !== null && val !== '' || 'Please type ', val => val > 0 && val < 5 || 'Please type']" />
           </div>
-          <div class="col-2">
+          <div class="col">
             <q-input dense filled type="number" v-model="up_num" label="净资产收益率" lazy-rules
               :rules="[val => val !== null && val !== '' || 'Please type ', val => val > 0 && val < 100 || 'Please type']" />
           </div>
@@ -18,7 +21,7 @@
               :rules="[val => val !== null && val !== '' || 'Please type ', val => val > -100 && val < 2 || 'Please type']" />
           </div>
         </div>
-        <q-btn dense label="Submit" type="submit" flat class="q-ml-xs" />
+        <q-btn dense :label="flatLable" type="submit" flat class="q-ml-xs" />
         <q-btn dense label="Reset" type="reset" flat class="q-ml-xs" />
       </q-form>
     </q-card>
@@ -33,7 +36,16 @@ export default {
   name: 'TableZhangTing',
   data() {
     return {
-      date: '895',
+      date: '89',
+      prompt: false,
+      dateNow: '',
+      fq: '实时行情',
+      opt: [
+        '历史行情',
+        '实时行情',
+        '后复权',
+        '实时/后复',
+      ]
     };
   },
   props: {
@@ -41,28 +53,46 @@ export default {
       type: String,
       default: 'yut'
     },
+    link: {
+      type: String,
+      default: '/polls/zhangTing/'
+    },
     nameList: {
-      type: Object,
+      type: Function,
     },
   },
   methods: {
+    promptNow() {
+      this.prompt = true
+      // console.log(this.prompt, 'uu2u')
+      let now = new Date()
+      const month = now.getMonth() >= 9 ? now.getMonth() + 1 : `0${now.getMonth() + 1}`
+      const date3 = now.getDate() >= 10 ? now.getDate() : `0${now.getDate()}`
+      this.dateNow = `${now.getFullYear()}/${month}/${date3}`
+      this.date = this.dateNow
+      // console.log(this.dateNow)
+    },
     onSubmit() {
-      // console.log(this.date)
-      api.get('/polls/zhangTing/', {
-        params: {
-          quarter: this.date,
-        },
-      }).then(res => {
-        // console.log(res)
-        this.nameList(res);
-      }).catch((err) => {
-        console.log(err);
-      });
+      // console.log(this.date, 'uu2u')
+      if (this.date !== '89') {
+        api.get(this.link, {
+          params: {
+            quarter: this.date,
+            fq: this.fq,
+          },
+        }).then(res => {
+          // console.log(res)
+          this.nameList(res);
+        }).catch((err) => {
+          console.log(err);
+        });
+      }
+    },
+    optionsFn(date1) {
+      return date1 <= this.dateNow
     },
   },
   setup() {
-
-    // const date = ref([])
     const day_num = ref(1)
     const up_num = ref(19)
     const down_num = ref(-5)
@@ -75,7 +105,6 @@ export default {
     }
 
     return {
-      prompt: ref(false),
       onReset,
       day_num,
       up_num,
@@ -84,3 +113,8 @@ export default {
   }
 }
 </script>
+<style lang="sass" scoped>
+.my-card
+  width: 100%
+  max-width: 420px
+</style>

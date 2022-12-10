@@ -5,7 +5,10 @@
       :rows-per-page-options="[50, 100, 200, 500, 1000, 0]" rows-per-page-label=" " flat bordered
       class="my-sticky-header-table" :visible-columns="visibleColumns" :filter="filter">
       <template v-slot:top-right>
-        <TableZhangTing :flatLable="flatLable = '当天涨停'" :nameList="onSubmitFather"></TableZhangTing>
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleDrawer" />
+        <TableZhangTing v-for="link2 in linksList" :key="link2.flatLable" :flatLable="link2.flatLable"
+          :link="link2.link" :nameList="onSubmitFather">
+        </TableZhangTing>
         <q-select v-model="visibleColumns" multiple outlined dense options-dense :display-value="$q.lang.table.columns"
           emit-value map-options :options="columns" option-value="name" options-cover style="min-width: 150px" />
 
@@ -29,6 +32,7 @@
 
 <script>
 import TableZhangTing from 'components/TableZhangTing.vue';
+import { inject } from 'vue';
 
 
 export default {
@@ -42,6 +46,20 @@ export default {
       name2: [],
       visibleColumns: [],
       filter: '',
+      linksList: [
+        {
+          flatLable: '价值',
+          link: '/polls/jiazhi/'
+        },
+        {
+          flatLable: '当天涨停',
+          link: '/polls/zhangTing/'
+        },
+        {
+          flatLable: 'addk',
+          link: '/polls/update_day_k/'
+        }
+      ]
     };
   },
   // props: {
@@ -59,11 +77,11 @@ export default {
       this.visibleColumns = val.data.col.map(function (user) { return user.name; })
     }
   },
-  // setup() { 
-  //   return {
-  //     filter: ref(''),
-  //   }
-  // }
+  setup() {
+    return {
+      toggleDrawer: inject('toggleDrawer'),
+    }
+  }
 }
 </script>
 <style lang="sass">
@@ -76,6 +94,8 @@ export default {
   thead tr:first-child th
     /* bg color is important for th; just specify one */
     background-color: #c1f4cd
+    max-height: 1.8rem
+    padding: 0px 0px
 
   thead tr th
     position: sticky
