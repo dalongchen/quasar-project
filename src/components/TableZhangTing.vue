@@ -39,9 +39,11 @@ export default {
       date: '89',
       prompt: false,
       dateNow: '',
-      fq: '实时行情',
+      fq: '未选',
       opt: [
-        '历史行情',
+        '更新交易股票',
+        'baostock历史k',
+        'east历史k',
         '实时行情',
         '后复权',
         '实时/后复',
@@ -73,8 +75,8 @@ export default {
       // console.log(this.dateNow)
     },
     onSubmit() {
-      // console.log(this.date, 'uu2u')
-      if (this.date !== '89') {
+      // console.log(this.fq !== '' && this.date !== '89', 'uu2u', this.fq, this.date)
+      if (this.fq !== '未选' && this.date !== '89') {
         api.get(this.link, {
           params: {
             quarter: this.date,
