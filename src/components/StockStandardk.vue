@@ -57,7 +57,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    console.log(props.mydata, 'uu')
+    // console.log(props.mydata, 'uu')
     let da_num = ref(0);
     onMounted(() => {
       api.get('/polls/5/stockStandardk/', {
@@ -65,19 +65,22 @@ export default defineComponent({
           inp: props.mydata
         },
       }).then(res => {
-        option.xAxis[0].data = res.data.categoryData
-        option.xAxis[1].data = res.data.categoryData
-        option.series[0].data = res.data.values
-        da_num.value = res.data.categoryData.length
-        option.dataZoom[0].startValue = res.data.categoryData.length - 350
-        option.dataZoom[0].endValue = res.data.categoryData.length
-        option.series[1].data = calculateMA(5, res.data.values)
-        option.series[2].data = calculateMA(10, res.data.values)
-        option.series[3].data = calculateMA(20, res.data.values)
-        option.series[4].data = calculateMA(30, res.data.values)
-        // option.series[5].data = res.data.dat_yj_yg
-        option.series[6].data = res.data.volumes
-        // console.log(res.data.values);
+        let data = res.data
+        let categoryData = data.categoryData
+        let values = data.values
+        option.xAxis[0].data = categoryData
+        option.xAxis[1].data = categoryData
+        option.series[0].data = values
+        da_num.value = categoryData.length
+        option.dataZoom[0].startValue = categoryData.length - 350
+        option.dataZoom[0].endValue = categoryData.length
+        option.series[1].data = calculateMA(5, values)
+        option.series[2].data = calculateMA(10, values)
+        option.series[3].data = calculateMA(20, values)
+        option.series[4].data = calculateMA(30, values)
+        // option.series[5].data = data.dat_yj_yg
+        option.series[6].data = data.volumes
+        // console.log(values);
       }).catch((err) => {
         console.log(err);
       });
@@ -124,16 +127,17 @@ export default defineComponent({
           // console.log(param)'amount', 'amplitude', 'up_change', 'num_change', 'turnover'
           return [
             '' + param.name + '<hr size=1 style="margin: 3px 0">',
-            'open: ' + param.data[1] + '<br/>',
-            'close: ' + param.data[2] + '<br/>',
-            'lowest: ' + param.data[3] + '<br/>',
-            'highest: ' + param.data[4] + '<br/>',
-            'volume: ' + (param.data[5] / 10000).toFixed(1) + 'w<br/>',
-            'amount: ' + (param.data[6] / 10000).toFixed(1) + 'w<br/>',
-            'amplitude: ' + param.data[7] + '<br/>',
-            'up_change: ' + param.data[8] + '<br/>',
-            'num_change: ' + param.data[9] + '<br/>',
-            'turnover: ' + param.data[10] + '<br/>',
+            '开盘:' + param.data[1] + '<br/>',
+            '收盘:' + param.data[2] + '<br/>',
+            '最低:' + param.data[3] + '<br/>',
+            '最高:' + param.data[4] + '<br/>',
+            '成交量:' + (param.data[5] / 10000000).toFixed(1) + 'kw<br/>',
+            '成交额:' + (param.data[6] / 10000000).toFixed(1) + 'kw<br/>',
+            '换手率:' + param.data[7] + '<br/>',
+            '涨跌幅:' + param.data[8] + '<br/>',
+            '市盈率:' + param.data[9] + '<br/>',
+            '市净率:' + param.data[10] + '<br/>',
+            '市销率:' + param.data[11] + '<br/>',
           ].join('');
         }
       },
@@ -257,7 +261,11 @@ export default defineComponent({
         {
           name: 'Dow',
           type: 'candlestick',
-          data: [],
+          data: [
+            [20, 34, 10, 38],
+            [40, 35, 30, 50],
+            [31, 38, 33, 44]
+          ],
           // data: data.dat.values,
           itemStyle: {
             color0: '#00da3c',
